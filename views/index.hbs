@@ -1,0 +1,85 @@
+<div class="header">
+    <h1>ChillChat 🛀</h1>
+    <h2></h2>
+</div>
+<div class="wrapper">
+    <ul id="mensajes" class="main">
+        <li> <span>Gregorio:</span> Con los dedos de las manos🖐, con los dedos de los pies🦵.....</li>
+        <li><span>Bienhallado:</span> Amén</li>
+        <li><span>M.Rajoy:</span> Lo que tiene que hacer una máquina es hacer más máquinas porque lo que nunca van a
+            hacer
+            las máquinas es
+            hacer más máquinas</li>
+    </ul>
+
+    <div class="input">
+        <input placeholder="Nombre" type="text" id="inputNombre">
+        <input placeholder="Mensaje" type="text" id="inputMensaje">
+        <button id="btnEnviar">Enviar</button>
+    </div>
+</div>
+{{!-- Nos traemos el javascript de la librería socket.io la cual está en node_modules --}}
+<script src="/socket.io/socket.io.js"></script>
+
+<script>
+    //Código JS de la parte del cliente
+    //conectamos con el servidor de webSocket
+    //La función io es de la librería socket y se usa para hacer la comunicación y enganchar el server con el socket.
+    const socket = io()
+
+    const inputNombre = document.getElementById('inputNombre');
+    const inputMensaje = document.getElementById('inputMensaje');
+
+    const btnEnviar = document.getElementById('btnEnviar');
+
+    btnEnviar.addEventListener('click', (event) => {
+        const data = { name: inputNombre.value, mensaje: inputMensaje.value }
+
+        event.target.classList.add('animate__animated', 'animate__rubberBand')
+        setTimeout(() => {
+            event.target.classList.remove('animate__rubberBand')
+        }, 1000)
+        //Emitir un evento
+        socket.emit('mensaje_chat', data)
+
+    })
+
+    //Recibe el evento 'mensaje_chat' que es enviado desde el server, en este caso en www.js, y podemos capturar el objeto de este evento ya que pasa por parámetro en la función de socket.on()
+    socket.on('mensaje_chat', (data) => {
+        //Dibujar en el html los nuevos mensajes capturados en el evento mensaje_chat.
+        const li = document.createElement('li')
+        const span = document.createElement('span')
+        const ul = document.getElementById('mensajes');
+
+        li.innerHTML = `<span>${data.name}:</span> ${data.mensaje}`
+        ul.append(li);
+
+    })
+
+    //Recibe el evento emitido desde el servidor.
+
+    socket.on('clientes_chat', (data) => {
+        const h2 = document.querySelector('.header h2')
+
+        h2.innerText = `👁 ${data}`
+    })
+
+    socket.on('desconexion', (data) => {
+        const li = document.createElement('li')
+        const ul = document.getElementById('mensajes');
+
+        li.innerHTML = data.mensaje
+        li.classList.add('animate__animated', 'animate__rubberBand')
+        ul.appendChild(li)
+    })
+
+    var objDiv = document.getElementsByClassName("main");
+    objDiv.scrollTop = objDiv.scrollHeight;
+</script>
+
+{{!-- Si quiero enlazar carpetas que estén en public solo hay que poner el nombre de la carpeta y el del archivo, node
+sobreentiende que la carpeta public--}}
+<script src="/javascripts/main.js">
+//Código JS de la parte del cliente
+
+</script>
