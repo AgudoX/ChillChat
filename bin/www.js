@@ -7,7 +7,6 @@
 const app = require('../app');
 const debug = require('debug')('chillchat:server');
 const http = require('http');
-const { disconnect } = require('process');
 
 /**
  * Get port from environment and store in Express.
@@ -33,8 +32,8 @@ io.on('connection', (socket) => {
   console.log('Se ha conectado un nuevo cliente');
   console.log('CLIENTES', io.engine.clientsCount)
   // Con broadcast conseguimos que el mensaje se envie a todos los clientes menos al que lo ha enviado
-  socket.broadcast.emit('mensaje_chat', {
-    name: 'Viva el betis', mensaje: 'Otro bético'
+  socket.broadcast.emit('conectado', {
+    mensaje: 'Usuario conectado'
   })
 
   // Emitir el número de clienets conectados
@@ -47,7 +46,7 @@ io.on('connection', (socket) => {
     io.emit('mensaje_chat', data);
   });
 
-  //Este es un evento de la librería que permite
+  //Este es un evento de la librería que permite realizar una accion cuando el cliente se desconecte del servidor.
   socket.on('disconnect', () => {
     io.emit('desconexion', {
       mensaje: 'Tanta paz lleves como descanso dejas'

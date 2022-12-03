@@ -3,14 +3,13 @@
     <h2></h2>
 </div>
 <div class="wrapper">
-    <ul id="mensajes" class="main">
-        <li> <span>Gregorio:</span> Con los dedos de las manos🖐, con los dedos de los pies🦵.....</li>
-        <li><span>Bienhallado:</span> Amén</li>
-        <li><span>M.Rajoy:</span> Lo que tiene que hacer una máquina es hacer más máquinas porque lo que nunca van a
-            hacer
-            las máquinas es
-            hacer más máquinas</li>
-    </ul>
+    <div id="main">
+        <ul id="mensajes">
+            <li><span>Bienhallado:</span> Amén</li>
+            <li><span>M.Rajoy:</span> Lo que tiene que hacer una máquina es hacer más máquinas porque lo que nunca van a
+                hacer las máquinas es hacer más máquinas</li>
+        </ul>
+    </div>
 
     <div class="input">
         <input placeholder="Nombre" type="text" id="inputNombre">
@@ -54,6 +53,8 @@
         li.innerHTML = `<span>${data.name}:</span> ${data.mensaje}`
         ul.append(li);
 
+        var objDiv = document.getElementById("main");
+        objDiv.scrollTop = objDiv.scrollHeight;
     })
 
     //Recibe el evento emitido desde el servidor.
@@ -73,8 +74,15 @@
         ul.appendChild(li)
     })
 
-    var objDiv = document.getElementsByClassName("main");
-    objDiv.scrollTop = objDiv.scrollHeight;
+    socket.on('conectado', (data) => {
+        const li = document.createElement('li')
+        const ul = document.getElementById('mensajes');
+
+        li.innerHTML = data.mensaje
+        li.classList.add('animate__animated', 'animate__rubberBand')
+        ul.appendChild(li)
+    })
+
 </script>
 
 {{!-- Si quiero enlazar carpetas que estén en public solo hay que poner el nombre de la carpeta y el del archivo, node

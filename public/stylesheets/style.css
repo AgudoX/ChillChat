@@ -47,6 +47,12 @@ h2 {
   text-shadow: 1px 1px 2px black;
 }
 
+#main {
+  overflow-y: scroll;
+  height: 600px;
+
+}
+
 ul {
   background-color: var(--color-2);
   color: var(--color-4);
@@ -70,6 +76,8 @@ ul li {
   font-family: 'Roboto';
   color: var(--color-4);
   font-style: italic;
+  width: 80%;
+  overflow: hidden;
 }
 
 ul li span {
